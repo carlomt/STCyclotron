@@ -36,6 +36,11 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 add_executable(STCyclotron STCyclotron.cc ${sources} ${headers})
 
 target_link_libraries(STCyclotron ${Geant4_LIBRARIES}  ${ROOT_LIBRARIES})
+
+#----------------------------------------------------------------------------
+# Depends on G4TENDL data to run
+add_dependencies(STCyclotron G4TENDL)
+
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
 # build rdecay02. This is so that we can run the executable directly because it
@@ -70,3 +75,13 @@ foreach(_script ${STCYCLOTRON_SCRIPTS})
    )
 endforeach()
 
+#----------------------------------------------------------------------------
+
+include(ExternalProject)
+ExternalProject_Add(G4TENDL
+  SOURCE_DIR ${PROJECT_BINARY_DIR}/ICRPdata
+  URL https://cern.ch/geant4-data/datasets/G4TENDL.1.3.2.tar.gz
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND ""
+  INSTALL_COMMAND ""
+  )
